@@ -1,0 +1,52 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: audiothread-api:latest
+    container_name: audiothread-api
+    ports:
+      - "5270:8080"
+    env_file:
+      - .env
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      AudioProcessing__ExecutionMode: "${AUDIO_PROCESSING_MODE:-Optimized}"
+      AudioProcessing__MaxConcurrentJobs: "2"
+      AudioProcessing__QueueCapacity: "8"
+      AudioSummarization__ModelThreads: "4"
+      AudioSummarization__TimeoutSeconds: "900"
+      AudioNoiseReduction__ModelThreads: "2"
+      AudioNoiseReduction__TimeoutSeconds: "900"
+      Database__RunMigrationsOnStartup: "true"
+      Cors__AllowedOrigins__0: "http://localhost:5173"
+      Cors__AllowedOrigins__1: "http://localhost:4173"
+      Cors__AllowedOrigins__2: "http://localhost:8081"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      start_period: 60s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+        reservations:
+          memory: 4G
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:5270}
+    image: audiothread-frontend:latest
+    container_name: audiothread-frontend
+    ports:
+      - "8081:80"
+    depends_on:
+      api:
+        condition: service_started
+    restart: unless-stopped

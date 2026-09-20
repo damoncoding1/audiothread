@@ -1,0 +1,87 @@
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/inter-tight';
+@import '@fontsource-variable/jetbrains-mono';
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter Variable', system-ui, sans-serif;
+  --font-display: 'Inter Tight Variable', 'Inter Variable', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+
+  --color-ink: light-dark(#1d1d1f, #f5f5f7);
+  --color-muted: light-dark(#6e6e73, #86868b);
+  --color-faint: light-dark(#a1a1a6, #5c5c61);
+  --color-canvas: light-dark(#f5f5f7, #000000);
+  --color-raised: light-dark(#ffffff, #1d1d1f);
+  --color-sunken: light-dark(#ebebed, #141416);
+  --color-separator: light-dark(#d2d2d7, #38383a);
+
+  --color-running: light-dark(#0071e3, #0a84ff);
+  --color-done: light-dark(#248a3d, #30d158);
+  --color-failed: light-dark(#d70015, #ff453a);
+
+  --text-display: 2.75rem;
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.03em;
+  --text-title: 1.375rem;
+  --text-title--line-height: 1.2;
+  --text-title--letter-spacing: -0.02em;
+  --text-eyebrow: 0.6875rem;
+  --text-eyebrow--line-height: 1;
+  --text-eyebrow--letter-spacing: 0.08em;
+
+  --radius-panel: 1.25rem;
+  --radius-control: 0.75rem;
+
+  --shadow-panel: 0 1px 2px light-dark(rgb(0 0 0 / 0.04), rgb(0 0 0 / 0.5)),
+    0 8px 24px light-dark(rgb(0 0 0 / 0.06), rgb(0 0 0 / 0.4));
+  --shadow-lifted: 0 2px 4px light-dark(rgb(0 0 0 / 0.06), rgb(0 0 0 / 0.6)),
+    0 16px 40px light-dark(rgb(0 0 0 / 0.1), rgb(0 0 0 / 0.5));
+}
+
+:root {
+  color-scheme: light dark;
+  accent-color: var(--color-running);
+}
+
+@layer base {
+  body {
+    @apply bg-canvas text-ink font-sans antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-running);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: light-dark(#1d1d1f, #f5f5f7);
+    color: light-dark(#ffffff, #1d1d1f);
+  }
+}
+
+@utility eyebrow {
+  font-size: var(--text-eyebrow);
+  line-height: var(--text-eyebrow--line-height);
+  letter-spacing: var(--text-eyebrow--letter-spacing);
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--color-faint);
+}
+
+@utility numeric {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

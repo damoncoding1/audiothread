@@ -1,0 +1,103 @@
+{
+  "server": {
+    "sequential": {
+      "single": {
+        "runs": 3,
+        "averageJobMilliseconds": 92039.0,
+        "medianJobMilliseconds": 92039.0,
+        "p95JobMilliseconds": 92039.0,
+        "groupCompletionMilliseconds": 92039.0,
+        "throughputJobsPerSecond": 0.011,
+        "successRate": 1.0,
+        "compressionMilliseconds": 1233.0,
+        "transcriptionMilliseconds": 5172.0,
+        "summarizationMilliseconds": 75404.0
+      },
+      "concurrent": {
+        "runs": 3,
+        "averageJobMilliseconds": 329095.0,
+        "medianJobMilliseconds": 329619.0,
+        "p95JobMilliseconds": 506309.05,
+        "groupCompletionMilliseconds": 525904.0,
+        "throughputJobsPerSecond": 0.008,
+        "successRate": 1.0,
+        "compressionMilliseconds": 1403.0,
+        "transcriptionMilliseconds": 5454.25,
+        "summarizationMilliseconds": 115655.25
+      }
+    },
+    "optimized": {
+      "single": {
+        "runs": 3,
+        "averageJobMilliseconds": 91632.0,
+        "medianJobMilliseconds": 91632.0,
+        "p95JobMilliseconds": 91632.0,
+        "groupCompletionMilliseconds": 91632.0,
+        "throughputJobsPerSecond": 0.011,
+        "successRate": 1.0,
+        "compressionMilliseconds": 1340.0,
+        "transcriptionMilliseconds": 5413.0,
+        "summarizationMilliseconds": 80337.0
+      },
+      "concurrent": {
+        "runs": 3,
+        "averageJobMilliseconds": 268646.25,
+        "medianJobMilliseconds": 268641.0,
+        "p95JobMilliseconds": 357832.85,
+        "groupCompletionMilliseconds": 357836.0,
+        "throughputJobsPerSecond": 0.011,
+        "successRate": 1.0,
+        "compressionMilliseconds": 1861.5,
+        "transcriptionMilliseconds": 10213.75,
+        "summarizationMilliseconds": 161326.5
+      }
+    }
+  },
+  "client": {
+    "source": "Chrome DevTools Performance sobre la aplicación real",
+    "input": {
+      "fileName": "audio-test.mp3",
+      "bytesInspected": 65536,
+      "warmupIterations": 1,
+      "measuredIterations": 3
+    },
+    "results": [
+      {
+        "mode": "sequential",
+        "iterations": 3,
+        "durationsMilliseconds": [
+          7.668,
+          2.685,
+          3.118
+        ],
+        "medianTotalMilliseconds": 3.118,
+        "maximumTotalMilliseconds": 7.668,
+        "validationContext": "main-thread"
+      },
+      {
+        "mode": "worker",
+        "iterations": 3,
+        "durationsMilliseconds": [
+          30.976,
+          19.792,
+          27.354
+        ],
+        "medianTotalMilliseconds": 27.354,
+        "maximumTotalMilliseconds": 30.976,
+        "validationContext": "worker"
+      }
+    ],
+    "traceEvidence": {
+      "sequentialMeasurements": 3,
+      "workerMeasurements": 3,
+      "sequentialWorkerSessions": 0,
+      "optimizedWorkerSessions": 3
+    }
+  },
+  "timeSavingsPercent": {
+    "Un audio": 0.44,
+    "Grupo de 4": 31.96,
+    "Promedio/job": 18.37
+  },
+  "clientWorkerLatencyOverheadPercent": 777.29
+}

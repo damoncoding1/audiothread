@@ -1,0 +1,199 @@
+{
+    "root_group": {
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {},
+        "checks": {
+                "job creation returns 202": {
+                    "id": "480006b66d4cb87e18e2239ae93fb709",
+                    "passes": 1,
+                    "fails": 0,
+                    "name": "job creation returns 202",
+                    "path": "::job creation returns 202"
+                },
+                "job completes successfully": {
+                    "path": "::job completes successfully",
+                    "id": "2e73da71e5e13dcf0efe2de5c3c65ada",
+                    "passes": 1,
+                    "fails": 0,
+                    "name": "job completes successfully"
+                },
+                "processed content is AAC": {
+                    "passes": 1,
+                    "fails": 0,
+                    "name": "processed content is AAC",
+                    "path": "::processed content is AAC",
+                    "id": "cb11f7a5d851c470ad8e77170db7d27a"
+                },
+                "job includes a summary": {
+                    "fails": 0,
+                    "name": "job includes a summary",
+                    "path": "::job includes a summary",
+                    "id": "c6b82b463386614e98d9c8bdb4e30d1c",
+                    "passes": 1
+                }
+            },
+        "name": ""
+    },
+    "metrics": {
+        "http_req_blocked": {
+            "avg": 0.06126888271604936,
+            "min": 0.002998,
+            "med": 0.009795,
+            "max": 1.49662,
+            "p(90)": 0.04204720000000003,
+            "p(95)": 0.30994289999999947
+        },
+        "checks": {
+            "passes": 4,
+            "fails": 0,
+            "thresholds": {
+                "rate==1": false
+            },
+            "value": 1
+        },
+        "vus_max": {
+            "value": 1,
+            "min": 1,
+            "max": 1
+        },
+        "http_req_sending": {
+            "avg": 0.24227557407407413,
+            "min": 0.01263,
+            "med": 0.031322,
+            "max": 19.993677,
+            "p(90)": 0.21878770000000086,
+            "p(95)": 0.7891063499999995
+        },
+        "vus": {
+            "value": 1,
+            "min": 1,
+            "max": 1
+        },
+        "audio_summarization_duration": {
+            "p(95)": 67369,
+            "avg": 67369,
+            "min": 67369,
+            "med": 67369,
+            "max": 67369,
+            "p(90)": 67369
+        },
+        "http_req_connecting": {
+            "min": 0,
+            "med": 0,
+            "max": 0.109808,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0.0006778271604938272
+        },
+        "audio_job_server_duration": {
+            "max": 80373,
+            "p(90)": 80373,
+            "p(95)": 80373,
+            "avg": 80373,
+            "min": 80373,
+            "med": 80373
+        },
+        "http_req_tls_handshaking": {
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0,
+            "min": 0
+        },
+        "audio_job_completion_duration": {
+            "max": 80635,
+            "p(90)": 80635,
+            "p(95)": 80635,
+            "avg": 80635,
+            "min": 80635,
+            "med": 80635
+        },
+        "iteration_duration": {
+            "avg": 80637.625681,
+            "min": 80637.625681,
+            "med": 80637.625681,
+            "max": 80637.625681,
+            "p(90)": 80637.625681,
+            "p(95)": 80637.625681
+        },
+        "http_req_failed": {
+            "passes": 0,
+            "fails": 162,
+            "value": 0
+        },
+        "audio_transcription_duration": {
+            "avg": 4678,
+            "min": 4678,
+            "med": 4678,
+            "max": 4678,
+            "p(90)": 4678,
+            "p(95)": 4678
+        },
+        "data_sent": {
+            "count": 3431119,
+            "rate": 42548.55931807612
+        },
+        "audio_jobs_completed": {
+            "passes": 1,
+            "fails": 0,
+            "thresholds": {
+                "rate==1": false
+            },
+            "value": 1
+        },
+        "http_req_duration": {
+            "max": 68.390075,
+            "p(90)": 2.6689827,
+            "p(95)": 5.075878099999996,
+            "avg": 1.722607876543209,
+            "min": 0.322943,
+            "med": 0.6854495
+        },
+        "iterations": {
+            "count": 1,
+            "rate": 0.012400782169920693
+        },
+        "data_received": {
+            "count": 121715,
+            "rate": 1509.3612018118972
+        },
+        "http_req_duration{expected_response:true}": {
+            "avg": 1.722607876543209,
+            "min": 0.322943,
+            "med": 0.6854495,
+            "max": 68.390075,
+            "p(90)": 2.6689827,
+            "p(95)": 5.075878099999996
+        },
+        "http_req_receiving": {
+            "avg": 0.13365641975308637,
+            "min": 0.029415,
+            "med": 0.0709125,
+            "max": 1.352603,
+            "p(90)": 0.24666510000000005,
+            "p(95)": 0.6264471499999994
+        },
+        "audio_compression_duration": {
+            "p(95)": 1260,
+            "avg": 1260,
+            "min": 1260,
+            "med": 1260,
+            "max": 1260,
+            "p(90)": 1260
+        },
+        "http_req_waiting": {
+            "min": 0.248038,
+            "med": 0.5133939999999999,
+            "max": 48.296463,
+            "p(90)": 2.5027288000000003,
+            "p(95)": 4.402595099999994,
+            "avg": 1.3466758827160499
+        },
+        "http_reqs": {
+            "count": 162,
+            "rate": 2.0089267115271525
+        }
+    }
+}

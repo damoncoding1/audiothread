@@ -1,0 +1,167 @@
+{
+    "metrics": {
+        "http_req_connecting": {
+            "avg": 0.0015715000000000002,
+            "min": 0,
+            "med": 0,
+            "max": 0.21009,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "http_req_sending": {
+            "max": 17.277997,
+            "p(90)": 2.7742496,
+            "p(95)": 4.1450622,
+            "avg": 1.0947728293413181,
+            "min": 0.004897,
+            "med": 0.046578499999999995
+        },
+        "data_received": {
+            "count": 250231,
+            "rate": 4394.1431315330365
+        },
+        "http_req_receiving": {
+            "avg": 0.5023462784431136,
+            "min": 0.011007,
+            "med": 0.0746325,
+            "max": 6.745013,
+            "p(90)": 1.4536128999999998,
+            "p(95)": 2.333432849999999
+        },
+        "checks": {
+            "passes": 16,
+            "fails": 0,
+            "thresholds": {
+                "rate==1": false
+            },
+            "value": 1
+        },
+        "http_reqs": {
+            "rate": 5.865155819750687,
+            "count": 334
+        },
+        "audio_jobs_completed": {
+            "passes": 4,
+            "fails": 0,
+            "thresholds": {
+                "rate==1": false
+            },
+            "value": 1
+        },
+        "iterations": {
+            "count": 4,
+            "rate": 0.07024138706288248
+        },
+        "data_sent": {
+            "rate": 68921.3055551162,
+            "count": 3924826
+        },
+        "http_req_duration": {
+            "med": 3.2115644999999997,
+            "max": 25.79972,
+            "p(90)": 10.144464799999993,
+            "p(95)": 14.541754849999991,
+            "avg": 4.431772386227546,
+            "min": 0.134748
+        },
+        "audio_job_completion_duration": {
+            "avg": 42525.5,
+            "min": 28104,
+            "med": 42527,
+            "max": 56944,
+            "p(90)": 56944,
+            "p(95)": 56944
+        },
+        "vus": {
+            "value": 2,
+            "min": 2,
+            "max": 4
+        },
+        "http_req_waiting": {
+            "avg": 2.8346532784431138,
+            "min": 0.09974,
+            "med": 1.9687255000000001,
+            "max": 25.072743,
+            "p(90)": 6.234628999999999,
+            "p(95)": 7.669519849999982
+        },
+        "iteration_duration": {
+            "med": 42527.410743,
+            "max": 56944.571353,
+            "p(90)": 56944.5708778,
+            "p(95)": 56944.5711154,
+            "avg": 42525.8715025,
+            "min": 28104.093171
+        },
+        "http_req_duration{expected_response:true}": {
+            "min": 0.134748,
+            "med": 3.2115644999999997,
+            "max": 25.79972,
+            "p(90)": 10.144464799999993,
+            "p(95)": 14.541754849999991,
+            "avg": 4.431772386227546
+        },
+        "http_req_failed": {
+            "passes": 0,
+            "fails": 334,
+            "value": 0
+        },
+        "http_req_blocked": {
+            "max": 6.772664,
+            "p(90)": 1.2682367,
+            "p(95)": 1.843927949999996,
+            "avg": 0.4002181107784429,
+            "min": 0.001842,
+            "med": 0.0114085
+        },
+        "http_req_tls_handshaking": {
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0,
+            "min": 0
+        },
+        "vus_max": {
+            "min": 4,
+            "max": 4,
+            "value": 4
+        }
+    },
+    "root_group": {
+        "groups": {},
+        "checks": {
+                "job creation returns 202": {
+                    "name": "job creation returns 202",
+                    "path": "::job creation returns 202",
+                    "id": "480006b66d4cb87e18e2239ae93fb709",
+                    "passes": 4,
+                    "fails": 0
+                },
+                "job completes successfully": {
+                    "id": "2e73da71e5e13dcf0efe2de5c3c65ada",
+                    "passes": 4,
+                    "fails": 0,
+                    "name": "job completes successfully",
+                    "path": "::job completes successfully"
+                },
+                "processed content is AAC": {
+                    "name": "processed content is AAC",
+                    "path": "::processed content is AAC",
+                    "id": "cb11f7a5d851c470ad8e77170db7d27a",
+                    "passes": 4,
+                    "fails": 0
+                },
+                "job includes a summary": {
+                    "passes": 4,
+                    "fails": 0,
+                    "name": "job includes a summary",
+                    "path": "::job includes a summary",
+                    "id": "c6b82b463386614e98d9c8bdb4e30d1c"
+                }
+            },
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e"
+    }
+}

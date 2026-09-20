@@ -1,0 +1,203 @@
+{
+  "info": {
+    "name": "AudioThread - Laboratorio 3",
+    "description": "Requests para generar las evidencias del laboratorio 3 (extraccion de resumen de audio con dos hilos).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5270",
+      "type": "string"
+    },
+    {
+      "key": "audioFileId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Cargar audio con voz (evidencia principal)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Responde 201 Created', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "const body = pm.response.json();",
+              "",
+              "pm.test('El audio se guardo como AAC', function () {",
+              "    pm.expect(body.contentType).to.eql('audio/aac');",
+              "    pm.expect(body.storagePath).to.match(/\\.aac$/i);",
+              "});",
+              "",
+              "pm.test('La respuesta trae el resumen', function () {",
+              "    pm.expect(body.summary).to.be.a('string');",
+              "    pm.expect(body.summary.length).to.be.above(0);",
+              "});",
+              "",
+              "pm.test('El resumen respeta el limite configurado', function () {",
+              "    pm.expect(body.summary.length).to.be.at.most(150);",
+              "});",
+              "",
+              "console.log('Resumen: ' + body.summary);",
+              "console.log('Caracteres: ' + body.summary.length);",
+              "",
+              "pm.collectionVariables.set('audioFileId', body.id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": [],
+              "description": "Selecciona aqui un archivo .wav o .mp3 QUE CONTENGA VOZ"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/audio-files",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "audio-files"]
+        },
+        "description": "Evidencia 1. Sube un audio con voz. La respuesta debe traer 201 Created, contentType audio/aac y el campo summary con el texto generado por los modelos locales.\n\nIMPORTANTE: en la pestaña Body > form-data, en la fila 'file' cambia el tipo de Text a File y selecciona tu archivo."
+      }
+    },
+    {
+      "name": "2. Consultar metadata por UUID",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Responde 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "const body = pm.response.json();",
+              "",
+              "pm.test('Devuelve el resumen persistido', function () {",
+              "    pm.expect(body.summary).to.be.a('string');",
+              "    pm.expect(body.summarizedAtUtc).to.not.eql(null);",
+              "});",
+              "",
+              "pm.test('El estado es Summarized', function () {",
+              "    pm.expect(body.status).to.eql('Summarized');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/audio-files/{{audioFileId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "audio-files", "{{audioFileId}}"]
+        },
+        "description": "Evidencia 3. Recupera la metadata del audio cargado. El UUID se toma automaticamente del request anterior. Comprueba que el resumen quedo guardado en la base de datos y que el estado paso a Summarized."
+      }
+    },
+    {
+      "name": "3. Cargar audio SIN voz (caso borde)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Responde 201 Created', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "const body = pm.response.json();",
+              "",
+              "pm.test('Usa el texto por defecto cuando no hay voz', function () {",
+              "    pm.expect(body.summary).to.eql('No speech detected in the audio');",
+              "});",
+              "",
+              "console.log('Resumen: ' + body.summary);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": [],
+              "description": "Usa tests/performance/audio/audio-test.wav que no contiene voz"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/audio-files",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "audio-files"]
+        },
+        "description": "Evidencia 4. Sube un audio que no contiene voz. El detector de actividad de voz descarta todo, la transcripcion sale vacia y el sistema guarda el texto por defecto en lugar de romperse."
+      }
+    },
+    {
+      "name": "4. Rechazo de formato no permitido",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Responde 400 Bad Request', function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "",
+              "pm.test('Informa el error de validacion', function () {",
+              "    const body = pm.response.json();",
+              "    pm.expect(body.errors).to.be.an('object');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": [],
+              "description": "Selecciona cualquier archivo que no sea .mp3 ni .wav, por ejemplo un .txt o un .png"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/audio-files",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "audio-files"]
+        },
+        "description": "Evidencia extra. Comprueba que la validacion sigue funcionando y que ni FFmpeg ni los modelos llegan a ejecutarse cuando el formato no esta permitido."
+      }
+    }
+  ]
+}

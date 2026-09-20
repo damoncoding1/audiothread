@@ -1,0 +1,33 @@
+{
+  "source": "Chrome DevTools Performance sobre la aplicación real",
+  "input": {
+    "fileName": "audio-test.mp3",
+    "bytesInspected": 65536,
+    "warmupIterations": 1,
+    "measuredIterations": 3
+  },
+  "results": [
+    {
+      "mode": "sequential",
+      "iterations": 3,
+      "durationsMilliseconds": [7.668, 2.685, 3.118],
+      "medianTotalMilliseconds": 3.118,
+      "maximumTotalMilliseconds": 7.668,
+      "validationContext": "main-thread"
+    },
+    {
+      "mode": "worker",
+      "iterations": 3,
+      "durationsMilliseconds": [30.976, 19.792, 27.354],
+      "medianTotalMilliseconds": 27.354,
+      "maximumTotalMilliseconds": 30.976,
+      "validationContext": "worker"
+    }
+  ],
+  "traceEvidence": {
+    "sequentialMeasurements": 3,
+    "workerMeasurements": 3,
+    "sequentialWorkerSessions": 0,
+    "optimizedWorkerSessions": 3
+  }
+}

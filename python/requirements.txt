@@ -1,0 +1,7 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+faster-whisper==1.1.1
+transformers==4.48.0
+torch==2.5.1+cpu
+torchaudio==2.5.1+cpu
+deepfilternet==0.5.6

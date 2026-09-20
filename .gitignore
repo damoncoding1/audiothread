@@ -1,0 +1,68 @@
+# Local secrets
+.env
+.env.*
+!.env.example
+
+# Local Codex and AI workspace files
+.codex/
+AGENTS.md
+
+# .NET
+bin/
+obj/
+TestResults/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build and benchmark artifacts
+BenchmarkDotNet.Artifacts/
+artifacts/performance/week8/**/api.log
+artifacts/performance/week8/**/vite-preview.log
+artifacts/performance/week8/**/browser-output.html
+artifacts/performance/week8/**/chrome.log
+Trace-*.json
+/front*-secuencial.json
+/front*-worker.json
+
+# AudioThread generated files at repository root
+/storage/
+/uploads/
+/processed/
+/models/
+/model-cache/
+*.mp3
+*.wav
+*.aac
+*.m4a
+*.flac
+
+# Python
+.venv/
+.performance-venv/
+venv/
+__pycache__/
+*.pyc
+
+# Local model weights downloaded at runtime
+model-cache/
+
+# Frontend
+node_modules/
+dist/
+build/
+.vite/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Audio fixtures used by performance tests
+!/tests/performance/audio/
+!/tests/performance/audio/*.mp3
+!/tests/performance/audio/*.wav
