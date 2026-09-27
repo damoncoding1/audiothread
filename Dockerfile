@@ -16,8 +16,12 @@ RUN dotnet publish src/AudioThread.Api/AudioThread.Api.csproj -c Release -o /app
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 
+ARG RELEASE_ID=local
+LABEL org.opencontainers.image.title="AudioThread API" \
+      org.opencontainers.image.revision="${RELEASE_ID}"
+
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends ffmpeg ca-certificates curl \
+    && apt-get install -y --no-install-recommends ffmpeg git ca-certificates curl \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=ghcr.io/astral-sh/uv:0.5.11 /uv /usr/local/bin/uv

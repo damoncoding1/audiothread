@@ -51,10 +51,16 @@ builder.Services
 
 var app = builder.Build();
 
-if (builder.Configuration.GetValue<bool>("Database:RunMigrationsOnStartup"))
+if (args.Contains("--migrate", StringComparer.OrdinalIgnoreCase))
 {
     await ApplyMigrationsAsync(app);
+    return;
 }
+
+app.Lifetime.ApplicationStopping.Register(() =>
+    app.Logger.LogInformation("Graceful shutdown started; new requests will stop being accepted"));
+app.Lifetime.ApplicationStopped.Register(() =>
+    app.Logger.LogInformation("Graceful shutdown completed"));
 
 if (app.Environment.IsDevelopment())
 {

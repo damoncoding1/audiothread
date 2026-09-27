@@ -30,10 +30,23 @@ public sealed class AudioProcessingBackgroundService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        await _executor.ExecuteAsync(
-            _queue.DequeueAllAsync(stoppingToken),
-            ProcessAsync,
-            stoppingToken);
+        _logger.LogInformation("Audio processing worker started");
+
+        try
+        {
+            await _executor.ExecuteAsync(
+                _queue.DequeueAllAsync(stoppingToken),
+                ProcessAsync,
+                stoppingToken);
+        }
+        catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
+        {
+            _logger.LogInformation("Audio processing worker received the shutdown signal");
+        }
+        finally
+        {
+            _logger.LogInformation("Audio processing worker stopped");
+        }
     }
 
     private async Task ProcessAsync(AudioProcessingWorkItem workItem, CancellationToken cancellationToken)
@@ -67,6 +80,11 @@ public sealed class AudioProcessingBackgroundService : BackgroundService
             _store.Complete(workItem.JobId, result);
 
             _logger.LogInformation("Background job {JobId} completed", workItem.JobId);
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            _logger.LogWarning("Background job {JobId} was interrupted by application shutdown", workItem.JobId);
+            throw;
         }
         catch (Exception exception)
         {

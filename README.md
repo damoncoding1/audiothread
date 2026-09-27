@@ -43,6 +43,19 @@ SUPABASE_DATABASE_CONNECTION_STRING=
 
 El archivo `.env` esta ignorado por Git y no debe subirse. Las claves reales de Supabase se adjuntaran en los comentarios de Canvas para que el profesor pueda ejecutar el proyecto sin exponer secretos.
 
+Las variables se organizan por despliegue y pueden modificarse sin cambiar el codigo:
+
+| Grupo | Variables principales | Proposito |
+| :--- | :--- | :--- |
+| Supabase | `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_DATABASE_CONNECTION_STRING` | Conectar Storage y PostgreSQL. |
+| Release | `IMAGE_TAG`, `RELEASE_ID` | Identificar de forma unica las imagenes construidas. |
+| Puertos | `API_HOST_PORT`, `APP_PORT`, `FRONTEND_HOST_PORT` | Configurar los puertos publicados y el puerto interno de la API. |
+| Procesamiento | `AUDIO_PROCESSING_*` | Ajustar modo, concurrencia y capacidad de la cola. |
+| Modelos | `AUDIO_SUMMARIZATION_*`, `AUDIO_NOISE_REDUCTION_*` | Configurar hilos y tiempos de espera. |
+| Operacion | `HOST_SHUTDOWN_TIMEOUT`, `CORS_ALLOWED_ORIGIN_*` | Definir el tiempo de apagado y los origenes permitidos. |
+
+Los valores del archivo son ejemplos seguros. Las credenciales reales deben permanecer solamente en `.env`.
+
 Para Supabase Storage:
 
 - El bucket debe llamarse `audio-files`.
@@ -156,27 +169,43 @@ cp .env.example .env
 Y completar los cinco valores de Supabase. Si estas corrigiendo este proyecto, las
 credenciales se entregan por separado, fuera del repositorio.
 
-### 2. Construir y levantar
+### 2. Construir una release identificable
 
 ```bash
-docker compose up --build
+export RELEASE_ID=$(git rev-parse --short HEAD)
+export IMAGE_TAG=$RELEASE_ID
+docker compose build
+```
+
+Cada imagen recibe la etiqueta y el identificador del commit utilizado para construirla.
+
+### 3. Aplicar migraciones como proceso administrativo
+
+```bash
+docker compose run --rm migrate
+```
+
+La migracion usa la misma imagen y configuracion de la API, pero se ejecuta una sola vez y de forma separada al proceso web.
+
+### 4. Levantar los servicios
+
+```bash
+docker compose up
 ```
 
 La primera vez el build descarga los dos modelos de inteligencia artificial y tarda entre
 10 y 20 minutos segun la conexion, la imagen final pesa alrededor de 6 GB. Las veces
 siguientes arranca en segundos porque Docker reutiliza las capas.
 
-Cuando termine, la API queda en `http://localhost:5270`, el frontend en
-`http://localhost:8080`, y las migraciones de la base de datos se aplican solas al
-arrancar, no hay que ejecutar `dotnet ef`.
+Cuando termine, la API queda por defecto en `http://localhost:5270` y el frontend en `http://localhost:8081`. Estos puertos pueden cambiarse desde `.env`. Las migraciones no se ejecutan durante el arranque normal.
 
-### 3. Comprobar que responde
+### 5. Comprobar que responde
 
 ```bash
 curl http://localhost:5270/health
 ```
 
-### 4. Cargar un audio
+### 6. Cargar un audio
 
 ```bash
 curl -X POST http://localhost:5270/api/audio-files \
@@ -189,7 +218,14 @@ Los logs del pipeline con los dos hilos se ven en la consola donde quedo corrien
 ### Para detenerlo
 
 ```bash
+docker compose stop -t 30 api
 docker compose down
+```
+
+La API recibe la señal de terminacion, cancela de forma controlada el procesamiento y registra en stdout el inicio y la finalizacion del apagado. Los logs pueden consultarse con:
+
+```bash
+docker compose logs -f api
 ```
 
 ### Notas

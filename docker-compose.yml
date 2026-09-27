@@ -1,30 +1,49 @@
+x-api-environment: &api-environment
+  ASPNETCORE_ENVIRONMENT: "${ASPNETCORE_ENVIRONMENT:-Production}"
+  APP_PORT: "${APP_PORT:-8080}"
+  ASPNETCORE_URLS: "http://+:${APP_PORT:-8080}"
+  AudioProcessing__ExecutionMode: "${AUDIO_PROCESSING_MODE:-Optimized}"
+  AudioProcessing__MaxConcurrentJobs: "${AUDIO_PROCESSING_MAX_CONCURRENT_JOBS:-2}"
+  AudioProcessing__QueueCapacity: "${AUDIO_PROCESSING_QUEUE_CAPACITY:-8}"
+  AudioSummarization__ModelThreads: "${AUDIO_SUMMARIZATION_MODEL_THREADS:-4}"
+  AudioSummarization__TimeoutSeconds: "${AUDIO_SUMMARIZATION_TIMEOUT_SECONDS:-900}"
+  AudioNoiseReduction__ModelThreads: "${AUDIO_NOISE_REDUCTION_MODEL_THREADS:-2}"
+  AudioNoiseReduction__TimeoutSeconds: "${AUDIO_NOISE_REDUCTION_TIMEOUT_SECONDS:-900}"
+  HostOptions__ShutdownTimeout: "${HOST_SHUTDOWN_TIMEOUT:-00:00:30}"
+  Cors__AllowedOrigins__0: "${CORS_ALLOWED_ORIGIN_0:-http://localhost:5173}"
+  Cors__AllowedOrigins__1: "${CORS_ALLOWED_ORIGIN_1:-http://localhost:4173}"
+  Cors__AllowedOrigins__2: "${CORS_ALLOWED_ORIGIN_2:-http://localhost:8081}"
+
 services:
+  migrate:
+    profiles: ["tools"]
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        RELEASE_ID: "${RELEASE_ID:-local}"
+    image: "audiothread-api:${IMAGE_TAG:-local}"
+    env_file:
+      - .env
+    environment: *api-environment
+    command: ["--migrate"]
+    restart: "no"
+
   api:
     build:
       context: .
       dockerfile: Dockerfile
-    image: audiothread-api:latest
-    container_name: audiothread-api
+      args:
+        RELEASE_ID: "${RELEASE_ID:-local}"
+    image: "audiothread-api:${IMAGE_TAG:-local}"
     ports:
-      - "5270:8080"
+      - "${API_HOST_PORT:-5270}:${APP_PORT:-8080}"
     env_file:
       - .env
-    environment:
-      ASPNETCORE_ENVIRONMENT: Production
-      AudioProcessing__ExecutionMode: "${AUDIO_PROCESSING_MODE:-Optimized}"
-      AudioProcessing__MaxConcurrentJobs: "2"
-      AudioProcessing__QueueCapacity: "8"
-      AudioSummarization__ModelThreads: "4"
-      AudioSummarization__TimeoutSeconds: "900"
-      AudioNoiseReduction__ModelThreads: "2"
-      AudioNoiseReduction__TimeoutSeconds: "900"
-      Database__RunMigrationsOnStartup: "true"
-      Cors__AllowedOrigins__0: "http://localhost:5173"
-      Cors__AllowedOrigins__1: "http://localhost:4173"
-      Cors__AllowedOrigins__2: "http://localhost:8081"
+    environment: *api-environment
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/health || exit 1"]
+      test: ["CMD-SHELL", "curl -fsS http://localhost:$${APP_PORT:-8080}/health || exit 1"]
       interval: 30s
       timeout: 10s
       start_period: 60s
@@ -42,10 +61,9 @@ services:
       dockerfile: Dockerfile
       args:
         VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:5270}
-    image: audiothread-frontend:latest
-    container_name: audiothread-frontend
+    image: "audiothread-frontend:${IMAGE_TAG:-local}"
     ports:
-      - "8081:80"
+      - "${FRONTEND_HOST_PORT:-8081}:80"
     depends_on:
       api:
         condition: service_started
